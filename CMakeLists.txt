@@ -13,6 +13,7 @@ add_subdirectory(external/glfw)
 add_executable(MyEngine
     src/main.cpp
     src/engine/Engine.cpp
+    src/graphics/Renderer.cpp
     external/glad/src/glad.c
 )
 

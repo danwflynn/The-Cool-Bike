@@ -1,6 +1,4 @@
 #include "Engine.h"
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
 
 void Engine::Run() {
@@ -9,7 +7,7 @@ void Engine::Run() {
         return;
     }
 
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "My Engine", nullptr, nullptr);
+    window = glfwCreateWindow(1280, 720, "My Engine", nullptr, nullptr);
     if (!window) {
         std::cout << "Failed to create GLFW window\n";
         glfwTerminate();
@@ -18,17 +16,17 @@ void Engine::Run() {
 
     glfwMakeContextCurrent(window);
 
-    // Initialize GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD\n";
         return;
     }
 
+    renderer.Init();
+
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
     while (!glfwWindowShouldClose(window)) {
-        glClearColor(0.1f, 0.2f, 0.8f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        renderer.Render();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
