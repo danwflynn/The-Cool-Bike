@@ -26,7 +26,13 @@ void Engine::Run() {
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
     while (!glfwWindowShouldClose(window)) {
-        renderer.Render();
+        renderer.BeginFrame();
+
+        // Later:
+        // - update game logic
+        // - submit draw calls to renderer
+
+        renderer.EndFrame();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
