@@ -14,6 +14,8 @@ add_executable(MyEngine
     src/main.cpp
     src/engine/Engine.cpp
     src/graphics/Renderer.cpp
+    src/graphics/Shader.cpp
+    src/graphics/Mesh.cpp
     external/glad/src/glad.c
 )
 
