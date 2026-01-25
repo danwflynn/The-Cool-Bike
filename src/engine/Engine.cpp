@@ -38,5 +38,6 @@ void Engine::Run() {
         glfwPollEvents();
     }
 
+    renderer.Shutdown();
     glfwTerminate();
 }

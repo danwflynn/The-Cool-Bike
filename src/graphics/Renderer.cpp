@@ -26,6 +26,7 @@ static float vertices[] = {
      0.0f,  0.5f, 0.0f
 };
 
+
 void Renderer::Init() {
     glEnable(GL_DEPTH_TEST);
 
@@ -82,4 +83,11 @@ void Renderer::BeginFrame() {
 
 void Renderer::EndFrame() {
     // nothing yet
+}
+
+
+void Renderer::Shutdown() {
+    if (vbo) glDeleteBuffers(1, &vbo);
+    if (vao) glDeleteVertexArrays(1, &vao);
+    if (shaderProgram) glDeleteProgram(shaderProgram);
 }

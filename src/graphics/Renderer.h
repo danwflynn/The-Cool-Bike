@@ -5,6 +5,7 @@ public:
     void Init();
     void BeginFrame();
     void EndFrame();
+    void Shutdown();
 
 private:
     unsigned int vao = 0;
