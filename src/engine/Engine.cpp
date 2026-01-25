@@ -72,9 +72,21 @@ void Engine::Run() {
     while (!glfwWindowShouldClose(window)) {
         renderer.BeginFrame();
 
+        float time = static_cast<float>(glfwGetTime());
+
+        transform.SetRotation(glm::vec3(time * 0.5f, time, time * 0.25f));
+
+        float scale = sin(time) * 0.5f + 1.0f;
+        transform.SetScale(glm::vec3(scale));
+
+        float radius = 0.5f;
+        transform.SetPosition(glm::vec3(sin(time) * radius, 0.0f, cos(time) * radius));
+
         glm::mat4 mvp = projection * view * transform.GetMatrix();
+
         shader.Bind();
         shader.SetMat4("u_MVP", mvp);
+
         triangleMesh.Draw();
 
         glfwSwapBuffers(window);
