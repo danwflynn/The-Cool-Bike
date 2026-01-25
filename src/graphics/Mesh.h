@@ -1,13 +1,18 @@
 #pragma once
+#include <glad/glad.h>
+#include <cstddef>
 
 class Mesh {
 public:
-    Mesh(const float* vertices, unsigned int size);
+    // Constructor for indexed mesh (vertices + indices)
+    Mesh(const float* vertices, size_t vertexSize, const unsigned int* indices, size_t indexSize);
     ~Mesh();
 
-    void Draw() const;
+    void Draw();
 
 private:
-    unsigned int vao;
-    unsigned int vbo;
+    unsigned int vao = 0;
+    unsigned int vbo = 0;
+    unsigned int ebo = 0;   // Element buffer object (for indices)
+    size_t indexCount = 0;
 };

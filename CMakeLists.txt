@@ -18,6 +18,7 @@ add_executable(MyEngine
     src/graphics/Shader.cpp
     src/graphics/Mesh.cpp
     src/math/Transform.cpp
+    src/math/Camera.cpp
     external/glad/src/glad.c
 )
 
