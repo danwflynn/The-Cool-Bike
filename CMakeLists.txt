@@ -9,6 +9,7 @@ if (MSVC)
 endif()
 
 add_subdirectory(external/glfw)
+add_subdirectory(external/glm)
 
 add_executable(MyEngine
     src/main.cpp
@@ -16,6 +17,7 @@ add_executable(MyEngine
     src/graphics/Renderer.cpp
     src/graphics/Shader.cpp
     src/graphics/Mesh.cpp
+    src/math/Transform.cpp
     external/glad/src/glad.c
 )
 
@@ -27,4 +29,5 @@ target_include_directories(MyEngine PRIVATE
 target_link_libraries(MyEngine
     glfw
     opengl32
+    glm::glm
 )

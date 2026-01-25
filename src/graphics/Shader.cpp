@@ -54,3 +54,8 @@ void Shader::Bind() const {
 void Shader::Unbind() const {
     glUseProgram(0);
 }
+
+void Shader::SetMat4(const char* name, const glm::mat4& matrix) const {
+    int location = glGetUniformLocation(program, name);
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+}

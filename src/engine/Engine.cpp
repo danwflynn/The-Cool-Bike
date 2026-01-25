@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "graphics/Shader.h"
 #include "graphics/Mesh.h"
+#include "math/Transform.h"
 #include <iostream>
 
 void Engine::Run() {
@@ -30,8 +31,11 @@ void Engine::Run() {
     static const char* vertexSrc = R"(
     #version 330 core
     layout (location = 0) in vec3 aPos;
+
+    uniform mat4 u_MVP;
+
     void main() {
-        gl_Position = vec4(aPos, 1.0);
+        gl_Position = u_MVP * vec4(aPos, 1.0);
     }
     )";
 
@@ -51,11 +55,26 @@ void Engine::Run() {
 
     Shader shader(vertexSrc, fragmentSrc);
     Mesh triangleMesh(triangle, sizeof(triangle));
+    Transform transform;
+
+    glm::mat4 projection = glm::perspective(
+        glm::radians(45.0f),
+        1280.0f / 720.0f,
+        0.1f,
+        100.0f
+    );
+
+    glm::mat4 view = glm::translate(
+        glm::mat4(1.0f),
+        glm::vec3(0.0f, 0.0f, -2.0f)
+    );
 
     while (!glfwWindowShouldClose(window)) {
         renderer.BeginFrame();
 
+        glm::mat4 mvp = projection * view * transform.GetMatrix();
         shader.Bind();
+        shader.SetMat4("u_MVP", mvp);
         triangleMesh.Draw();
 
         glfwSwapBuffers(window);
