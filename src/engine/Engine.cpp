@@ -65,20 +65,20 @@ void Engine::Run() {
             vec3 norm = normalize(Normal);
             vec3 viewDir = normalize(u_ViewPos - FragPos);
 
-            // --- Ambient ---
-            vec3 ambient = 0.2 * u_ObjectColor;
+            // --- Base diffuse mostly camera-facing (sides bright) ---
+            float viewDiffuse = max(dot(norm, viewDir), 0.0);
+            vec3 diffuse = 0.7 * viewDiffuse * u_ObjectColor; // stronger camera light
 
-            // --- View-dependent diffuse (main) ---
-            float diff = max(dot(norm, viewDir), 0.0);
-
-            // --- Slight top-lighting for realism ---
+            // --- Sunlight contribution from above ---
             vec3 sunDir = normalize(vec3(0.0, 1.0, 0.0));
-            diff = mix(diff, max(dot(norm, sunDir), 0.0), 0.3);
+            float sunFactor = max(dot(norm, sunDir), 0.0); 
+            diffuse += 0.3 * sunFactor * u_ObjectColor; // slightly weaker sun light
 
-            vec3 diffuse = diff * u_ObjectColor;
+            // --- Ambient ---
+            vec3 ambient = 0.05 * u_ObjectColor; // slightly darker ambient for bottom
 
             // --- Specular ---
-            vec3 reflectDir = reflect(-viewDir, norm);
+            vec3 reflectDir = reflect(-sunDir, norm);
             float spec = pow(max(dot(viewDir, reflectDir), 0.0), 16.0);
             vec3 specular = 0.3 * spec * vec3(1.0);
 
