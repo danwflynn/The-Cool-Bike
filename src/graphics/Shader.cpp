@@ -2,7 +2,6 @@
 #include <glad/glad.h>
 #include <iostream>
 
-
 unsigned int Shader::CompileShader(unsigned int type, const char* src) {
     unsigned int id = glCreateShader(type);
     glShaderSource(id, 1, &src, nullptr);
@@ -28,7 +27,6 @@ Shader::Shader(const char* vertexSrc, const char* fragmentSrc) {
     glAttachShader(program, fragmentShader);
     glLinkProgram(program);
 
-    // Check link status
     int success;
     glGetProgramiv(program, GL_LINK_STATUS, &success);
     if (!success) {
@@ -55,7 +53,38 @@ void Shader::Unbind() const {
     glUseProgram(0);
 }
 
-void Shader::SetMat4(const char* name, const glm::mat4& matrix) const {
+int Shader::GetUniformLocation(const char* name) const {
+    if (m_UniformLocationCache.count(name)) {
+        return m_UniformLocationCache[name];
+    }
+
     int location = glGetUniformLocation(program, name);
-    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+    if (location == -1) {
+        std::cerr << "Warning: uniform '" << name << "' doesn't exist or is unused\n";
+    }
+
+    m_UniformLocationCache[name] = location;
+    return location;
+}
+
+void Shader::SetMat4(const char* name, const glm::mat4& matrix) const {
+    glUniformMatrix4fv(
+        GetUniformLocation(name),
+        1,
+        GL_FALSE,
+        glm::value_ptr(matrix)
+    );
+}
+
+void Shader::SetVec3(const char* name, const glm::vec3& value) const {
+    int location = glGetUniformLocation(program, name);
+    glUniform3fv(location, 1, glm::value_ptr(value));
+}
+
+void Shader::SetFloat(const char* name, float value) const {
+    glUniform1f(GetUniformLocation(name), value);
+}
+
+void Shader::SetInt(const char* name, int value) const {
+    glUniform1i(GetUniformLocation(name), value);
 }

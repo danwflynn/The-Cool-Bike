@@ -31,7 +31,6 @@ void Engine::Run() {
     renderer.Init();
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
-    // ----------------- Shader -----------------
     static const char* vertexSrc = R"(
         #version 330 core
         layout(location = 0) in vec3 aPos;
@@ -52,55 +51,104 @@ void Engine::Run() {
 
     static const char* fragmentSrc = R"(
         #version 330 core
+
         in vec3 FragPos;
         in vec3 Normal;
+
         out vec4 FragColor;
 
-        uniform vec3 u_LightDir = normalize(vec3(-1.0, -1.0, -1.0));
-        uniform vec3 u_LightColor = vec3(1.0, 1.0, 1.0);
-        uniform vec3 u_ObjectColor = vec3(0.2, 0.7, 0.3);
+        uniform vec3 u_LightDir;
+        uniform vec3 u_LightColor;
+        uniform vec3 u_ObjectColor;
+        uniform vec3 u_ViewPos;
 
-        void main() {
-            vec3 ambient = 0.1 * u_LightColor;
+        void main()
+        {
+            // Normalize inputs
             vec3 norm = normalize(Normal);
-            float diff = max(dot(norm, -u_LightDir), 0.0);
+            vec3 lightDir = normalize(-u_LightDir);
+
+            // --- Ambient ---
+            vec3 ambient = 0.35 * u_LightColor;
+
+            // --- Diffuse ---
+            float diff = max(dot(norm, lightDir), 0.0);
             vec3 diffuse = diff * u_LightColor;
-            vec3 result = (ambient + diffuse) * u_ObjectColor;
+
+            // --- Specular ---
+            vec3 viewDir = normalize(u_ViewPos - FragPos);
+            vec3 reflectDir = reflect(-lightDir, norm);
+
+            float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
+            vec3 specular = 0.5 * spec * u_LightColor;
+
+            vec3 result = (ambient + diffuse + specular) * u_ObjectColor;
             FragColor = vec4(result, 1.0);
         }
     )";
 
     Shader shader(vertexSrc, fragmentSrc);
 
-    // ----------------- Cube Mesh -----------------
     float cubeVertices[] = {
-        // positions         // normals
-        -0.5f,-0.5f, 0.5f, 0,0,1,
-         0.5f,-0.5f, 0.5f, 0,0,1,
-         0.5f, 0.5f, 0.5f, 0,0,1,
-        -0.5f, 0.5f, 0.5f, 0,0,1,
-        -0.5f,-0.5f,-0.5f, 0,0,-1,
-         0.5f,-0.5f,-0.5f, 0,0,-1,
-         0.5f, 0.5f,-0.5f, 0,0,-1,
-        -0.5f, 0.5f,-0.5f, 0,0,-1
+        // positions          // normals
+        // Front (+Z)
+        -0.5f,-0.5f, 0.5f,   0,0,1,
+        0.5f,-0.5f, 0.5f,   0,0,1,
+        0.5f, 0.5f, 0.5f,   0,0,1,
+        -0.5f, 0.5f, 0.5f,   0,0,1,
+
+        // Back (-Z)
+        0.5f,-0.5f,-0.5f,   0,0,-1,
+        -0.5f,-0.5f,-0.5f,   0,0,-1,
+        -0.5f, 0.5f,-0.5f,   0,0,-1,
+        0.5f, 0.5f,-0.5f,   0,0,-1,
+
+        // Left (-X)
+        -0.5f,-0.5f,-0.5f,  -1,0,0,
+        -0.5f,-0.5f, 0.5f,  -1,0,0,
+        -0.5f, 0.5f, 0.5f,  -1,0,0,
+        -0.5f, 0.5f,-0.5f,  -1,0,0,
+
+        // Right (+X)
+        0.5f,-0.5f, 0.5f,   1,0,0,
+        0.5f,-0.5f,-0.5f,   1,0,0,
+        0.5f, 0.5f,-0.5f,   1,0,0,
+        0.5f, 0.5f, 0.5f,   1,0,0,
+
+        // Top (+Y)
+        -0.5f, 0.5f, 0.5f,   0,1,0,
+        0.5f, 0.5f, 0.5f,   0,1,0,
+        0.5f, 0.5f,-0.5f,   0,1,0,
+        -0.5f, 0.5f,-0.5f,   0,1,0,
+
+        // Bottom (-Y)
+        -0.5f,-0.5f,-0.5f,   0,-1,0,
+        0.5f,-0.5f,-0.5f,   0,-1,0,
+        0.5f,-0.5f, 0.5f,   0,-1,0,
+        -0.5f,-0.5f, 0.5f,   0,-1,0
     };
 
     unsigned int cubeIndices[] = {
-        0,1,2, 2,3,0,
-        1,5,6, 6,2,1,
-        5,4,7, 7,6,5,
-        4,0,3, 3,7,4,
-        3,2,6, 6,7,3,
-        4,5,1, 1,0,4
+        0, 1, 2,  2, 3, 0,      // front
+        4, 5, 6,  6, 7, 4,      // back
+        8, 9,10, 10,11, 8,      // left
+        12,13,14, 14,15,12,      // right
+        16,17,18, 18,19,16,      // top
+        20,21,22, 22,23,20       // bottom
     };
 
-    Mesh cube(cubeVertices, sizeof(cubeVertices), cubeIndices, sizeof(cubeIndices));
+    Mesh cube(
+        cubeVertices,
+        sizeof(cubeVertices),
+        cubeIndices,
+        sizeof(cubeIndices),
+        6 * sizeof(float)
+    );
     Transform cubeTransform;
 
-    // ----------------- Camera -----------------
     Camera camera(60.0f, 1280.0f/720.0f, 0.1f, 100.0f);
     camera.SetPosition(glm::vec3(0.0f, 0.0f, 3.0f));
-    camera.SetRotation(glm::vec3(0.0f)); // pitch, yaw, roll
+    camera.SetRotation(glm::vec3(0.0f));
 
     double lastX = 640, lastY = 360;
     bool firstMouse = true;
@@ -110,7 +158,6 @@ void Engine::Run() {
 
     double lastTime = glfwGetTime();
 
-    // ----------------- Main Loop -----------------
     while (!glfwWindowShouldClose(window)) {
         renderer.BeginFrame();
 
@@ -118,26 +165,22 @@ void Engine::Run() {
         float deltaTime = static_cast<float>(currentTime - lastTime);
         lastTime = currentTime;
 
-        // ----------------- Keyboard -----------------
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
 
         glm::vec3 camPos = camera.GetPosition();
-        glm::vec3 rot = camera.GetRotation(); // pitch, yaw, roll
+        glm::vec3 rot = camera.GetRotation();
 
-        // Forward (ignoring pitch)
         glm::vec3 forward{
             sin(rot.y),
             0.0f,
-            -cos(rot.y) // negative here!
+            -cos(rot.y)
         };
         forward = glm::normalize(forward);
 
-        // Right vector perpendicular to forward
         glm::vec3 right = glm::normalize(glm::cross(forward, glm::vec3(0,1,0)));
         glm::vec3 up = glm::vec3(0,1,0);
 
-        // Keyboard movement
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camPos += forward * cameraSpeed * deltaTime;
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camPos -= forward * cameraSpeed * deltaTime;
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camPos -= right * cameraSpeed * deltaTime;
@@ -147,7 +190,6 @@ void Engine::Run() {
 
         camera.SetPosition(camPos);
 
-        // ----------------- Mouse Look -----------------
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
 
@@ -158,24 +200,27 @@ void Engine::Run() {
         }
 
         float xoffset = static_cast<float>(xpos - lastX);
-        float yoffset = static_cast<float>(ypos - lastY); // y-axis screen coordinates
+        float yoffset = static_cast<float>(ypos - lastY);
         lastX = xpos;
         lastY = ypos;
 
         xoffset *= mouseSensitivity;
         yoffset *= mouseSensitivity;
 
-        rot.y += glm::radians(xoffset);  // yaw
-        rot.x += glm::radians(yoffset);  // pitch inverted correctly
+        rot.y += glm::radians(xoffset);
+        rot.x += glm::radians(yoffset);
 
         if (rot.x > glm::radians(89.0f)) rot.x = glm::radians(89.0f);
         if (rot.x < glm::radians(-89.0f)) rot.x = glm::radians(-89.0f);
 
         camera.SetRotation(rot);
 
-        // ----------------- Draw Cube -----------------
         glm::mat4 mvp = camera.GetProjectionMatrix() * camera.GetViewMatrix() * cubeTransform.GetMatrix();
         shader.Bind();
+        shader.SetVec3("u_ViewPos", camera.GetPosition());
+        shader.SetVec3("u_LightDir", glm::vec3(-0.3f, -1.0f, -0.4f));
+        shader.SetVec3("u_LightColor", glm::vec3(1.0f));
+        shader.SetVec3("u_ObjectColor", glm::vec3(0.2f, 0.7f, 0.3f));
         shader.SetMat4("u_MVP", mvp);
         shader.SetMat4("u_Model", cubeTransform.GetMatrix());
         cube.Draw();
