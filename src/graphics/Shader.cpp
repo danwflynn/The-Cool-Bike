@@ -1,6 +1,8 @@
 #include "Shader.h"
 #include <glad/glad.h>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 unsigned int Shader::CompileShader(unsigned int type, const char* src) {
     unsigned int id = glCreateShader(type);
@@ -18,9 +20,27 @@ unsigned int Shader::CompileShader(unsigned int type, const char* src) {
     return id;
 }
 
-Shader::Shader(const char* vertexSrc, const char* fragmentSrc) {
-    unsigned int vertexShader = CompileShader(GL_VERTEX_SHADER, vertexSrc);
-    unsigned int fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragmentSrc);
+std::string Shader::ReadFile(const char* path) {
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open shader file: " << path << std::endl;
+        return "";
+    }
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    return buffer.str();
+}
+
+Shader::Shader(const char* vertexPath, const char* fragmentPath) {
+    std::string vertexSource = ReadFile(vertexPath);
+    std::string fragmentSource = ReadFile(fragmentPath);
+
+    const char* vSrc = vertexSource.c_str();
+    const char* fSrc = fragmentSource.c_str();
+
+    unsigned int vertexShader = CompileShader(GL_VERTEX_SHADER, vSrc);
+    unsigned int fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fSrc);
 
     program = glCreateProgram();
     glAttachShader(program, vertexShader);

@@ -7,7 +7,7 @@
 
 class Shader {
 public:
-    Shader(const char* vertexSrc, const char* fragmentSrc);
+    Shader(const char* vertexPath, const char* fragmentPath);
     ~Shader();
 
     void Bind() const;
@@ -21,11 +21,9 @@ public:
 
 private:
     unsigned int program;
-
     unsigned int CompileShader(unsigned int type, const char* src);
-
     int GetUniformLocation(const char* name) const;
+    static std::string ReadFile(const char* path);
 
-private:
     mutable std::unordered_map<std::string, int> m_UniformLocationCache;
 };

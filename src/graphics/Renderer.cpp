@@ -1,9 +1,16 @@
 #include "Renderer.h"
-#include <glad/glad.h>
+#include <iostream>
 
-void Renderer::Init() {
+void Renderer::Init(GLFWwindow* window) {
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        std::cout << "Failed to initialize GLAD\n";
+        return;
+    }
+
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
+
+    std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 }
 
 void Renderer::BeginFrame() {
