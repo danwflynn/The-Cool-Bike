@@ -26,7 +26,7 @@ void Engine::Run() {
 
     renderer.Init(window);
 
-    Shader shader("assets/shaders/default.vert", "assets/shaders/default.frag");
+    Shader shader("assets/shaders/default_vert.glsl", "assets/shaders/default_frag.glsl");
 
     Model bike("assets/bike/standard_bike.glb");
     Transform bikeTransform;
