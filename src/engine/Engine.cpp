@@ -1,8 +1,6 @@
 #include "Engine.h"
-#include "graphics/Shader.h"
 #include "math/Transform.h"
 #include "math/Camera.h"
-#include "graphics/Model.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -26,9 +24,6 @@ void Engine::Run() {
 
     renderer.Init(window);
 
-    Shader shader("assets/shaders/default_vert.glsl", "assets/shaders/default_frag.glsl");
-
-    Model bike("assets/bike/standard_bike.glb");
     Transform bikeTransform;
     bikeTransform.SetScale(glm::vec3(0.01f));
     bikeTransform.SetPosition(glm::vec3(0.0f, 0.0f, -2.0f));
@@ -92,21 +87,7 @@ void Engine::Run() {
 
         camera.SetRotation(rot);
 
-        shader.Bind();
-        shader.SetVec3("u_ViewPos", camera.GetPosition());
-        shader.SetVec3("u_LightDir", glm::vec3(-0.3f, -1.0f, -0.4f));
-        shader.SetVec3("u_LightColor", glm::vec3(1.0f));
-        shader.SetVec3("u_ObjectColor", glm::vec3(0.2f, 0.7f, 0.3f));
-
-        glm::mat4 mvp =
-            camera.GetProjectionMatrix() *
-            camera.GetViewMatrix() *
-            bikeTransform.GetMatrix();
-
-        shader.SetMat4("u_MVP", mvp);
-        shader.SetMat4("u_Model", bikeTransform.GetMatrix());
-
-        bike.Draw(shader);
+        renderer.RenderBike(bikeTransform, camera);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
