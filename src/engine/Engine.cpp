@@ -1,8 +1,8 @@
 #include "Engine.h"
 #include "graphics/Shader.h"
-#include "graphics/Mesh.h"
 #include "math/Transform.h"
 #include "math/Camera.h"
+#include "graphics/Model.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -90,59 +90,14 @@ void Engine::Run() {
 
     Shader shader(vertexSrc, fragmentSrc);
 
-    float cubeVertices[] = {
-        // positions          // normals
-        // Front
-        -0.5f,-0.5f, 0.5f,  0,0,1,
-         0.5f,-0.5f, 0.5f,  0,0,1,
-         0.5f, 0.5f, 0.5f,  0,0,1,
-        -0.5f, 0.5f, 0.5f,  0,0,1,
-
-        // Back
-         0.5f,-0.5f,-0.5f,  0,0,-1,
-        -0.5f,-0.5f,-0.5f,  0,0,-1,
-        -0.5f, 0.5f,-0.5f,  0,0,-1,
-         0.5f, 0.5f,-0.5f,  0,0,-1,
-
-        // Left
-        -0.5f,-0.5f,-0.5f, -1,0,0,
-        -0.5f,-0.5f, 0.5f, -1,0,0,
-        -0.5f, 0.5f, 0.5f, -1,0,0,
-        -0.5f, 0.5f,-0.5f, -1,0,0,
-
-        // Right
-         0.5f,-0.5f, 0.5f,  1,0,0,
-         0.5f,-0.5f,-0.5f,  1,0,0,
-         0.5f, 0.5f,-0.5f,  1,0,0,
-         0.5f, 0.5f, 0.5f,  1,0,0,
-
-        // Top
-        -0.5f, 0.5f, 0.5f,  0,1,0,
-         0.5f, 0.5f, 0.5f,  0,1,0,
-         0.5f, 0.5f,-0.5f,  0,1,0,
-        -0.5f, 0.5f,-0.5f,  0,1,0,
-
-        // Bottom
-        -0.5f,-0.5f,-0.5f,  0,-1,0,
-         0.5f,-0.5f,-0.5f,  0,-1,0,
-         0.5f,-0.5f, 0.5f,  0,-1,0,
-        -0.5f,-0.5f, 0.5f,  0,-1,0
-    };
-
-    unsigned int cubeIndices[] = {
-        0,1,2, 2,3,0,
-        4,5,6, 6,7,4,
-        8,9,10,10,11,8,
-        12,13,14,14,15,12,
-        16,17,18,18,19,16,
-        20,21,22,22,23,20
-    };
-
-    Mesh cube(cubeVertices, sizeof(cubeVertices), cubeIndices, sizeof(cubeIndices), 6 * sizeof(float));
-    Transform cubeTransform;
+    Model bike("assets/bike/standard_bike.glb");
+    Transform bikeTransform;
+    bikeTransform.SetScale(glm::vec3(0.01f));
+    bikeTransform.SetPosition(glm::vec3(0.0f, 0.0f, -2.0f));
+    bikeTransform.SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
     Camera camera(60.0f, 1280.0f / 720.0f, 0.1f, 100.0f);
-    camera.SetPosition({ 0.0f, 0.0f, 3.0f });
+    camera.SetPosition({ 0.0f, 0.5f, 5.0f });
 
     double lastX = 640, lastY = 360;
     bool firstMouse = true;
@@ -208,12 +163,12 @@ void Engine::Run() {
         glm::mat4 mvp =
             camera.GetProjectionMatrix() *
             camera.GetViewMatrix() *
-            cubeTransform.GetMatrix();
+            bikeTransform.GetMatrix();
 
         shader.SetMat4("u_MVP", mvp);
-        shader.SetMat4("u_Model", cubeTransform.GetMatrix());
+        shader.SetMat4("u_Model", bikeTransform.GetMatrix());
 
-        cube.Draw();
+        bike.Draw(shader);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

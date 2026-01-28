@@ -3,6 +3,7 @@
 
 void Renderer::Init() {
     glEnable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
 }
 
 void Renderer::BeginFrame() {

@@ -10,6 +10,7 @@ endif()
 
 add_subdirectory(external/glfw)
 add_subdirectory(external/glm)
+add_subdirectory(external/assimp)
 
 add_executable(MyEngine
     src/main.cpp
@@ -17,6 +18,7 @@ add_executable(MyEngine
     src/graphics/Renderer.cpp
     src/graphics/Shader.cpp
     src/graphics/Mesh.cpp
+    src/graphics/Model.cpp
     src/math/Transform.cpp
     src/math/Camera.cpp
     external/glad/src/glad.c
@@ -31,4 +33,5 @@ target_link_libraries(MyEngine
     glfw
     opengl32
     glm::glm
+    assimp
 )
