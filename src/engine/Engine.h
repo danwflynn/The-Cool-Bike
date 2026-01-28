@@ -2,6 +2,7 @@
 #include "graphics/Renderer.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "controller/controller.h"
 
 class Engine {
 public:
@@ -9,4 +10,5 @@ public:
 private:
     GLFWwindow* window;
     Renderer renderer;
+    Controller controller;
 };

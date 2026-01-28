@@ -1,0 +1,73 @@
+#pragma once
+#include <GLFW/glfw3.h>
+#include <iostream>
+#include <cstring>
+
+class Controller
+{
+public:
+    Controller(int joystickID = GLFW_JOYSTICK_1)
+        : jid(joystickID)
+    {
+    }
+
+    bool isConnected() const
+    {
+        return glfwJoystickPresent(jid) &&
+               glfwJoystickIsGamepad(jid);
+    }
+
+    const char* getName() const
+    {
+        if (!isConnected()) return "No controller";
+        return glfwGetGamepadName(jid);
+    }
+
+    bool update()
+    {
+        if (!isConnected())
+            return false;
+
+        return glfwGetGamepadState(jid, &state);
+    }
+
+    /* -------- Buttons -------- */
+
+    bool buttonPressed(int button) const
+    {
+        return state.buttons[button] == GLFW_PRESS;
+    }
+
+    bool cross()  const { return buttonPressed(GLFW_GAMEPAD_BUTTON_CROSS); }
+    bool circle() const { return buttonPressed(GLFW_GAMEPAD_BUTTON_CIRCLE); }
+    bool square() const { return buttonPressed(GLFW_GAMEPAD_BUTTON_SQUARE); }
+    bool triangle() const { return buttonPressed(GLFW_GAMEPAD_BUTTON_TRIANGLE); }
+
+    bool l1() const { return buttonPressed(GLFW_GAMEPAD_BUTTON_LEFT_BUMPER); }
+    bool r1() const { return buttonPressed(GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER); }
+
+    bool options() const { return buttonPressed(GLFW_GAMEPAD_BUTTON_START); }
+    bool share()   const { return buttonPressed(GLFW_GAMEPAD_BUTTON_BACK); }
+
+    /* -------- Axes / Sticks -------- */
+
+    float leftStickX() const { return state.axes[GLFW_GAMEPAD_AXIS_LEFT_X]; }
+    float leftStickY() const { return state.axes[GLFW_GAMEPAD_AXIS_LEFT_Y]; }
+
+    float rightStickX() const { return state.axes[GLFW_GAMEPAD_AXIS_RIGHT_X]; }
+    float rightStickY() const { return state.axes[GLFW_GAMEPAD_AXIS_RIGHT_Y]; }
+
+    float leftTrigger() const
+    {
+        return (state.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER] + 1.0f) * 0.5f;
+    }
+
+    float rightTrigger() const
+    {
+        return (state.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER] + 1.0f) * 0.5f;
+    }
+
+private:
+    int jid;
+    GLFWgamepadstate state{};
+};
