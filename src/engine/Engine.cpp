@@ -72,6 +72,8 @@ void Engine::Run() {
         controller.update();
         pos -= forward * speed * dt * controller.applyDeadzone(controller.leftStickY());
         pos += right * speed * dt * controller.applyDeadzone(controller.leftStickX());
+        pos.y -= speed * dt * controller.applyDeadzone(controller.rightTrigger());
+        pos.y += speed * dt * controller.applyDeadzone(controller.leftTrigger());
 
         camera.SetPosition(pos);
 
