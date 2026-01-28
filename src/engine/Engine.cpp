@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
+
 void Engine::Run() {
     if (!glfwInit()) {
         std::cout << "Failed to initialize GLFW\n";
@@ -69,13 +70,8 @@ void Engine::Run() {
         if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) pos.y -= speed * dt;
 
         controller.update();
-        float controller_x = controller.leftStickX();
-        float controller_y = controller.leftStickY();
-        if (std::abs(controller_x) < 0.1f) controller_x = 0.0f;
-        if (std::abs(controller_y) < 0.1f) controller_y = 0.0f;
-        pos -= forward * speed * dt * controller_y;
-        pos += right * speed * dt * controller_x;
-        std::cout << "X: " << controller.leftStickX() << " Y: " << controller.leftStickY() << std::endl;
+        pos -= forward * speed * dt * controller.applyDeadzone(controller.leftStickY());
+        pos += right * speed * dt * controller.applyDeadzone(controller.leftStickX());
 
         camera.SetPosition(pos);
 

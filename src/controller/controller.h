@@ -31,7 +31,6 @@ public:
         return glfwGetGamepadState(jid, &state);
     }
 
-    /* -------- Buttons -------- */
 
     bool buttonPressed(int button) const
     {
@@ -49,7 +48,6 @@ public:
     bool options() const { return buttonPressed(GLFW_GAMEPAD_BUTTON_START); }
     bool share()   const { return buttonPressed(GLFW_GAMEPAD_BUTTON_BACK); }
 
-    /* -------- Axes / Sticks -------- */
 
     float leftStickX() const { return state.axes[GLFW_GAMEPAD_AXIS_LEFT_X]; }
     float leftStickY() const { return state.axes[GLFW_GAMEPAD_AXIS_LEFT_Y]; }
@@ -65,6 +63,16 @@ public:
     float rightTrigger() const
     {
         return (state.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER] + 1.0f) * 0.5f;
+    }
+
+
+    static float applyDeadzone(float value, float threshold = 0.1f) {
+        // 10% to 20% (0.1f to 0.2f) is the industry standard
+        if (std::abs(value) < threshold) return 0.0f;
+        
+        // Optional: Rescale the remaining range so 0.1 becomes the new 0.0
+        // and 1.0 remains 1.0. This prevents a "snap" in movement.
+        return (value - (value > 0 ? threshold : -threshold)) / (1.0f - threshold);
     }
 
 private:
