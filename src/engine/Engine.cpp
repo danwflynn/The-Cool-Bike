@@ -8,14 +8,13 @@
 
 
 void Engine::Run() {
-    if (!glfwInit()) {
-        std::cout << "Failed to initialize GLFW\n";
-        return;
-    }
+    if (!glfwInit()) return;
 
-    window = glfwCreateWindow(1280, 720, "My Engine", nullptr, nullptr);
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+    window = glfwCreateWindow(mode->width, mode->height, "My Engine", monitor, nullptr);
     if (!window) {
-        std::cout << "Failed to create window\n";
         glfwTerminate();
         return;
     }
@@ -30,8 +29,8 @@ void Engine::Run() {
     bikeTransform.SetPosition(glm::vec3(0.0f, 0.0f, -2.0f));
     bikeTransform.SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
-    Camera camera(60.0f, 1280.0f / 720.0f, 0.1f, 100.0f);
-    camera.SetPosition({ 0.0f, 0.5f, 5.0f });
+    Camera camera(60.0f, float(mode->width) / float(mode->height), 0.1f, 100.0f);
+    camera.SetPosition({0.0f, 0.5f, 5.0f});
 
     double lastX = 640, lastY = 360;
     bool firstMouse = true;
