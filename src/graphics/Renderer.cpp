@@ -26,7 +26,6 @@ void Renderer::Init(GLFWwindow* window) {
         "assets/shaders/ground_frag.glsl"
     );
 
-    // positions only for now
     float vertices[] = {
         -500.0f, 0.0f, -500.0f,
         500.0f, 0.0f, -500.0f,
@@ -96,4 +95,9 @@ void Renderer::RenderGround(const Camera& camera) {
 
 void Renderer::EndFrame() {
     // later: render queues, post-processing, UI
+}
+
+
+float Renderer::getBikeBottomY() {
+    return m_Bike->getBottomY();
 }

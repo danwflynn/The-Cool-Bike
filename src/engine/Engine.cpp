@@ -1,6 +1,6 @@
 #include "Engine.h"
-#include "math/Transform.h"
 #include "math/Camera.h"
+#include "entities/Bike.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -24,13 +24,10 @@ void Engine::Run() {
 
     renderer.Init(window);
 
-    Transform bikeTransform;
-    bikeTransform.SetScale(glm::vec3(0.01f));
-    bikeTransform.SetPosition(glm::vec3(0.0f, 0.0f, -2.0f));
-    bikeTransform.SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-
     Camera camera(60.0f, float(mode->width) / float(mode->height), 0.1f, 100.0f);
     camera.SetPosition({0.0f, 0.5f, 5.0f});
+
+    Bike bike(camera, renderer.getBikeBottomY());
 
     double lastX = 640, lastY = 360;
     bool firstMouse = true;
@@ -96,7 +93,7 @@ void Engine::Run() {
 
         camera.SetRotation(rot);
 
-        renderer.RenderBike(bikeTransform, camera);
+        renderer.RenderBike(bike.getTransform(), camera);
         renderer.RenderGround(camera);
 
         glfwSwapBuffers(window);

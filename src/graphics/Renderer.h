@@ -14,6 +14,8 @@ public:
     void RenderGround(const Camera& camera);
     void EndFrame();
 
+    float getBikeBottomY();
+
 private:
     std::unique_ptr<Shader> m_DefaultShader;
     std::unique_ptr<Shader> m_GroundShader;

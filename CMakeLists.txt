@@ -21,6 +21,7 @@ add_executable(MyEngine
     src/graphics/Model.cpp
     src/math/Transform.cpp
     src/math/Camera.cpp
+    src/entities/Bike.cpp
     external/glad/src/glad.c
 )
 
