@@ -73,7 +73,7 @@ void Model::LoadModel(const std::string& path) {
     std::cout << "Loaded meshes: " << meshes.size() << std::endl;
 }
 
-void Model::Draw(Shader& shader) {
+void Model::Draw() {
     for (const auto& mesh : meshes) {
         mesh.Draw();
     }

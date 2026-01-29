@@ -11,9 +11,12 @@ public:
     void Init(GLFWwindow* window);
     void BeginFrame();
     void RenderBike(const Transform& transform, const Camera& camera);
+    void RenderGround(const Camera& camera);
     void EndFrame();
 
 private:
     std::unique_ptr<Shader> m_DefaultShader;
-    std::unique_ptr<Model>  m_Bike;
+    std::unique_ptr<Shader> m_GroundShader;
+    std::unique_ptr<Model> m_Bike;
+    std::unique_ptr<Mesh> m_groundMesh;
 };

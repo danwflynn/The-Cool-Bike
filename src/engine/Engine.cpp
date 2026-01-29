@@ -98,6 +98,7 @@ void Engine::Run() {
         camera.SetRotation(rot);
 
         renderer.RenderBike(bikeTransform, camera);
+        renderer.RenderGround(camera);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

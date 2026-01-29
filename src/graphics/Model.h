@@ -10,7 +10,7 @@ class Model {
 public:
     Model(const std::string& path);
 
-    void Draw(Shader& shader);
+    void Draw();
 
 private:
     std::vector<Mesh> meshes;
