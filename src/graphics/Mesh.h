@@ -10,7 +10,7 @@ public:
         size_t vertexSize,
         const unsigned int* indices,
         size_t indexSize,
-        unsigned int strideBytes = 6 * sizeof(float) // default: pos + normal
+        size_t strideBytes = 6 * sizeof(float)
     );
 
     ~Mesh();

@@ -5,7 +5,7 @@ Mesh::Mesh(
     size_t vertexSize,
     const unsigned int* indices,
     size_t indexSize,
-    unsigned int strideBytes
+    size_t strideBytes
 ) : vertexStride(strideBytes)
 {
     indexCount = indexSize / sizeof(unsigned int);
@@ -17,10 +17,10 @@ Mesh::Mesh(
     glBindVertexArray(vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, vertexSize, vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertexSize), vertices, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize, indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizeiptr>(indexSize), indices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(
         0,
