@@ -17,8 +17,13 @@ void Renderer::Init(GLFWwindow* window) {
         "assets/shaders/default_frag.glsl"
     );
 
+    std::vector<MeshSplitRule> bikeSplits = {
+        { "polygon2", SplitAxis::Z, 0.0f },
+        { "polygon3", SplitAxis::Z, 0.0f }
+    };
     m_Bike = std::make_unique<Model>(
-        "assets/bike/standard_bike.glb"
+        "assets/bike/standard_bike.glb",
+        bikeSplits
     );
 
     m_GroundShader = std::make_unique<Shader>(
