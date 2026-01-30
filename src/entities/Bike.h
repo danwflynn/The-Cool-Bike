@@ -7,10 +7,11 @@ class Bike {
 public:
     static constexpr float SCALE = 0.01f;
 
-    Bike(Camera& cameraRef, float bottomY);
+    Bike(Camera& cameraRef);
 
     Transform& getTransform();
 private:
+    float minY;
     Transform transform;
     Camera& camera;
 };

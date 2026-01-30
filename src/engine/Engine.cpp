@@ -27,7 +27,7 @@ void Engine::Run() {
     Camera camera(60.0f, float(mode->width) / float(mode->height), 0.1f, 100.0f);
     camera.SetPosition({0.0f, 0.5f, 5.0f});
 
-    Bike bike(camera, renderer.getBikeBottomY());
+    Bike bike(camera);
 
     double lastX = 640, lastY = 360;
     bool firstMouse = true;

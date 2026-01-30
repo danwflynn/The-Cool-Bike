@@ -96,8 +96,3 @@ void Renderer::RenderGround(const Camera& camera) {
 void Renderer::EndFrame() {
     // later: render queues, post-processing, UI
 }
-
-
-float Renderer::getBikeBottomY() {
-    return m_Bike->getBottomY();
-}

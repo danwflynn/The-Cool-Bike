@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 
-Model::Model(const std::string& path) : minY(std::numeric_limits<float>::max()) {
+Model::Model(const std::string& path) {
     LoadModel(path);
 }
 
@@ -49,8 +49,6 @@ void Model::LoadModel(const std::string& path) {
             vertices.push_back(mesh->mNormals[v].x);
             vertices.push_back(mesh->mNormals[v].y);
             vertices.push_back(mesh->mNormals[v].z);
-
-            if (mesh->mVertices[v].y < minY) minY = mesh->mVertices[v].y;
         }
 
         // Indices
@@ -79,8 +77,4 @@ void Model::Draw() {
     for (const auto& mesh : meshes) {
         mesh.Draw();
     }
-}
-
-float Model::getBottomY() {
-    return minY;
 }
