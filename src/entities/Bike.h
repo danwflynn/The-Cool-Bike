@@ -1,6 +1,8 @@
 #pragma once
 #include "math/Transform.h"
 #include "math/Camera.h"
+#include "WheelHitbox.h"
+#include <optional>
 
 
 class Bike {
@@ -11,7 +13,9 @@ public:
 
     Transform& getTransform();
 private:
-    float minY;
     Transform transform;
     Camera& camera;
+
+    std::optional<WheelHitbox> frontWheel;
+    std::optional<WheelHitbox> backWheel;
 };

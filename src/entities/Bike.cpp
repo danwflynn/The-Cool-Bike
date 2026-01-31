@@ -5,7 +5,6 @@
 #include <iostream>
 
 Bike::Bike(Camera& cameraRef) : camera(cameraRef) {
-    minY = std::numeric_limits<float>::max();
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(
         "assets/bike/standard_bike.glb",
@@ -21,13 +20,22 @@ Bike::Bike(Camera& cameraRef) : camera(cameraRef) {
     for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
         aiMesh* mesh = scene->mMeshes[i];
 
-        for (unsigned int v = 0; v < mesh->mNumVertices; v++) {
-            if (minY > mesh->mVertices[v].y) minY = mesh->mVertices[v].y;
+        if (scene->mName.C_Str() == "polygon2") {
+            std::vector<glm::vec3> posVertices;
+            std::vector<glm::vec3> negVertices;
+            posVertices.reserve(mesh->mNumVertices);
+            negVertices.reserve(mesh->mNumVertices);
+            for (unsigned int v = 0; v < mesh->mNumVertices; v++) {
+                if (mesh->mVertices[v].z >= 0) posVertices.push_back(glm::vec3(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z));
+                else negVertices.push_back(glm::vec3(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z));
+            }
+            frontWheel.emplace(posVertices, transform);
+            backWheel.emplace(negVertices, transform);
         }
     }
 
     transform.SetScale(glm::vec3(SCALE));
-    transform.SetPosition(glm::vec3(0.0f, -1 * minY * SCALE, -2.0f));
+    transform.SetPosition(glm::vec3(0.0f, 1.0f, -2.0f));
     transform.SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 }
 

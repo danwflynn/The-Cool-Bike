@@ -22,6 +22,7 @@ add_executable(MyEngine
     src/math/Transform.cpp
     src/math/Camera.cpp
     src/entities/Bike.cpp
+    src/entities/WheelHitbox.cpp
     external/glad/src/glad.c
 )
 
