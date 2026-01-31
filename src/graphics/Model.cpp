@@ -214,3 +214,7 @@ void Model::Draw() {
         mesh.Draw();
     }
 }
+
+std::vector<Mesh>& Model::getMeshes() {
+    return meshes;
+}

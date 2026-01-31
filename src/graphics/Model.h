@@ -17,6 +17,7 @@ public:
     );
 
     void Draw();
+    std::vector<Mesh>& getMeshes();
 
 private:
     std::vector<Mesh> meshes;
