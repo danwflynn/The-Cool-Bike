@@ -60,7 +60,7 @@ target_link_libraries(MyEngine
 )
 
 add_executable(MyEngineTests
-    test/TransformTests.cpp
+    test/math/TransformTests.cpp
 )
 
 target_link_libraries(MyEngineTests
