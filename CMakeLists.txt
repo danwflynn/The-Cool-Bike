@@ -63,6 +63,10 @@ add_executable(MyEngineTests
     test/math/TransformTests.cpp
 )
 
+target_compile_definitions(MyEngineTests PRIVATE
+    GLM_ENABLE_EXPERIMENTAL
+)
+
 target_link_libraries(MyEngineTests
     MyEngineCore
     gtest_main
