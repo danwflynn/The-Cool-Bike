@@ -6,9 +6,12 @@
 #include <assimp/postprocess.h>
 #include <glm/gtx/string_cast.hpp>
 #include <iostream>
+#include <glm/gtc/constants.hpp>
 
 #include "entities/Bike.h"
 
+
+constexpr float EPS = 1e-5f;
 
 class WheelHitboxTests : public ::testing::Test {
 protected:
@@ -54,6 +57,7 @@ protected:
 
 TEST_F(WheelHitboxTests, GetWorldCenterAlignedWithTransform) {
     ASSERT_TRUE(frontWheel.has_value());
+    ASSERT_TRUE(backWheel.has_value());
     glm::vec3 originalFrontWorldCenter = frontWheel->GetWorldCenter();
     glm::vec3 originalBackWorldCenter = backWheel->GetWorldCenter();
     std::cout << "Starting front wheel center: " << glm::to_string(frontWheel->GetWorldCenter()) << std::endl;
@@ -65,6 +69,24 @@ TEST_F(WheelHitboxTests, GetWorldCenterAlignedWithTransform) {
     EXPECT_FLOAT_EQ(backWheel->GetWorldCenter().x, originalBackWorldCenter.x + 1.0f);
     EXPECT_FLOAT_EQ(backWheel->GetWorldCenter().y, originalBackWorldCenter.y + 1.0f);
     EXPECT_FLOAT_EQ(backWheel->GetWorldCenter().z, originalBackWorldCenter.z + 1.0f);
+    std::cout << "Ending front wheel center: " << glm::to_string(frontWheel->GetWorldCenter()) << std::endl;
+    std::cout << "Ending back wheel center: " << glm::to_string(backWheel->GetWorldCenter()) << std::endl;
+}
+
+TEST_F(WheelHitboxTests, GetWorldCenterAlignedWithYAxisRotation) {
+    ASSERT_TRUE(frontWheel.has_value());
+    ASSERT_TRUE(backWheel.has_value());
+    glm::vec3 originalFrontWorldCenter = frontWheel->GetWorldCenter();
+    glm::vec3 originalBackWorldCenter = backWheel->GetWorldCenter();
+    std::cout << "Starting front wheel center: " << glm::to_string(frontWheel->GetWorldCenter()) << std::endl;
+    std::cout << "Starting back wheel center: " << glm::to_string(backWheel->GetWorldCenter()) << std::endl;
+    transform.SetRotation(glm::vec3(0.0f, glm::radians(90.0f), 0.0f));
+    EXPECT_NEAR(frontWheel->GetWorldCenter().x, originalFrontWorldCenter.z, EPS);
+    EXPECT_NEAR(frontWheel->GetWorldCenter().y, originalFrontWorldCenter.y, EPS);
+    EXPECT_NEAR(frontWheel->GetWorldCenter().z, originalFrontWorldCenter.x, EPS);
+    EXPECT_NEAR(backWheel->GetWorldCenter().x, originalBackWorldCenter.z, EPS);
+    EXPECT_NEAR(backWheel->GetWorldCenter().y, originalBackWorldCenter.y, EPS);
+    EXPECT_NEAR(backWheel->GetWorldCenter().z, originalBackWorldCenter.x, EPS);
     std::cout << "Ending front wheel center: " << glm::to_string(frontWheel->GetWorldCenter()) << std::endl;
     std::cout << "Ending back wheel center: " << glm::to_string(backWheel->GetWorldCenter()) << std::endl;
 }
