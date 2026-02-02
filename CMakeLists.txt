@@ -62,6 +62,7 @@ target_link_libraries(MyEngine
 add_executable(MyEngineTests
     test/math/TransformTests.cpp
     test/math/CameraTests.cpp
+    test/entities/WheelHitboxTests.cpp
 )
 
 target_compile_definitions(MyEngineTests PRIVATE

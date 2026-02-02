@@ -20,7 +20,7 @@ Bike::Bike(Camera& cameraRef) : camera(cameraRef) {
     for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
         aiMesh* mesh = scene->mMeshes[i];
 
-        if (scene->mName.C_Str() == "polygon2") {
+        if (mesh->mName == aiString("polygon2")) {
             std::vector<glm::vec3> posVertices;
             std::vector<glm::vec3> negVertices;
             posVertices.reserve(mesh->mNumVertices);
