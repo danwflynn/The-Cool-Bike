@@ -1,6 +1,7 @@
 #include "WheelHitbox.h"
 #include <limits>
 #include <algorithm>
+#include <glm/gtc/matrix_transform.hpp>
 
 WheelHitbox::WheelHitbox(const std::vector<glm::vec3>& vertices, Transform& parentTransform)
     : transform(parentTransform),
@@ -36,15 +37,6 @@ glm::vec3 WheelHitbox::GetWorldCenter() const {
     return glm::vec3(world * local);
 }
 
-float WheelHitbox::GetWorldRadius() const {
-    glm::mat4 world = transform.GetMatrix();
-
-    glm::vec3 localRadiusVec(0.0f, radius, 0.0f);
-    glm::vec3 worldRadiusVec = glm::vec3(world * glm::vec4(localRadiusVec, 0.0f));
-
-    return glm::length(worldRadiusVec);
-}
-
 float WheelHitbox::GetWorldThickness() const {
     glm::mat4 world = transform.GetMatrix();
 
@@ -52,4 +44,36 @@ float WheelHitbox::GetWorldThickness() const {
     glm::vec3 worldThicknessVec = glm::vec3(world * glm::vec4(localThicknessVec, 0.0f));
 
     return glm::length(worldThicknessVec);
+}
+
+float WheelHitbox::GetWorldVerticalRadius() const {
+    const glm::vec3& scale = transform.GetScale();
+    const glm::vec3& rot   = transform.GetRotation();
+
+    // Wheel local Y rotated into world
+    glm::mat4 rotMat(1.0f);
+    rotMat = glm::rotate(rotMat, rot.x, glm::vec3(1,0,0));
+    rotMat = glm::rotate(rotMat, rot.y, glm::vec3(0,1,0));
+    rotMat = glm::rotate(rotMat, rot.z, glm::vec3(0,0,1));
+
+    glm::vec3 worldUp = glm::vec3(rotMat * glm::vec4(0,1,0,0));
+
+    float verticalComponent = std::abs(glm::dot(worldUp, glm::vec3(0,1,0)));
+
+    return radius * scale.y * verticalComponent;
+}
+
+bool WheelHitbox::IsCollidingWithGround() const {
+    float centerY = GetWorldCenter().y;
+    float verticalRadius = GetWorldVerticalRadius();
+
+    return (centerY - verticalRadius) <= 0.0f;
+}
+
+float WheelHitbox::GetGroundPenetration() const {
+    float centerY = GetWorldCenter().y;
+    float verticalRadius = GetWorldVerticalRadius();
+
+    float penetration = verticalRadius - centerY;
+    return std::max(penetration, 0.0f);
 }

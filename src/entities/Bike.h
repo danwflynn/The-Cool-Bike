@@ -12,6 +12,8 @@ public:
     Bike(Camera& cameraRef);
 
     Transform& getTransform();
+    bool Bike::IsCollidingWithGround() const;
+
 private:
     Transform transform;
     Camera& camera;

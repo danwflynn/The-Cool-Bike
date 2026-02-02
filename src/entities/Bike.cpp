@@ -36,9 +36,13 @@ Bike::Bike(Camera& cameraRef) : camera(cameraRef) {
 
     transform.SetScale(glm::vec3(SCALE));
     transform.SetPosition(glm::vec3(0.0f, 2.0f, -2.0f));
-    transform.SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+    transform.SetRotation(glm::vec3(0.0f, 0.0f, glm::radians(45.0f)));
 }
 
 Transform& Bike::getTransform() {
     return transform;
+}
+
+bool Bike::IsCollidingWithGround() const {
+    return backWheel->IsCollidingWithGround() || frontWheel->IsCollidingWithGround();
 }
