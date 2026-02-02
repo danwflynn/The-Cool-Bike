@@ -90,3 +90,39 @@ TEST_F(WheelHitboxTests, GetWorldCenterAlignedWithYAxisRotation) {
     std::cout << "Ending front wheel center: " << glm::to_string(frontWheel->GetWorldCenter()) << std::endl;
     std::cout << "Ending back wheel center: " << glm::to_string(backWheel->GetWorldCenter()) << std::endl;
 }
+
+TEST_F(WheelHitboxTests, GetWorldCenterAlignedWithXAxisRotation) {
+    ASSERT_TRUE(frontWheel.has_value());
+    ASSERT_TRUE(backWheel.has_value());
+    glm::vec3 originalFrontWorldCenter = frontWheel->GetWorldCenter();
+    glm::vec3 originalBackWorldCenter = backWheel->GetWorldCenter();
+    std::cout << "Starting front wheel center: " << glm::to_string(frontWheel->GetWorldCenter()) << std::endl;
+    std::cout << "Starting back wheel center: " << glm::to_string(backWheel->GetWorldCenter()) << std::endl;
+    transform.SetRotation(glm::vec3(glm::radians(180.0f), 0.0f, 0.0f));
+    EXPECT_NEAR(frontWheel->GetWorldCenter().x, originalFrontWorldCenter.x, EPS);
+    EXPECT_NEAR(frontWheel->GetWorldCenter().y, -originalFrontWorldCenter.y, EPS);
+    EXPECT_NEAR(frontWheel->GetWorldCenter().z, -originalFrontWorldCenter.z, EPS);
+    EXPECT_NEAR(backWheel->GetWorldCenter().x, originalBackWorldCenter.x, EPS);
+    EXPECT_NEAR(backWheel->GetWorldCenter().y, -originalBackWorldCenter.y, EPS);
+    EXPECT_NEAR(backWheel->GetWorldCenter().z, -originalBackWorldCenter.z, EPS);
+    std::cout << "Ending front wheel center: " << glm::to_string(frontWheel->GetWorldCenter()) << std::endl;
+    std::cout << "Ending back wheel center: " << glm::to_string(backWheel->GetWorldCenter()) << std::endl;
+}
+
+TEST_F(WheelHitboxTests, GetWorldCenterAlignedWithZAxisRotation) {
+    ASSERT_TRUE(frontWheel.has_value());
+    ASSERT_TRUE(backWheel.has_value());
+    glm::vec3 originalFrontWorldCenter = frontWheel->GetWorldCenter();
+    glm::vec3 originalBackWorldCenter = backWheel->GetWorldCenter();
+    std::cout << "Starting front wheel center: " << glm::to_string(frontWheel->GetWorldCenter()) << std::endl;
+    std::cout << "Starting back wheel center: " << glm::to_string(backWheel->GetWorldCenter()) << std::endl;
+    transform.SetRotation(glm::vec3(0.0f, 0.0f, glm::radians(180.0f)));
+    EXPECT_NEAR(frontWheel->GetWorldCenter().x, originalFrontWorldCenter.x, EPS);
+    EXPECT_NEAR(frontWheel->GetWorldCenter().y, -originalFrontWorldCenter.y, EPS);
+    EXPECT_NEAR(frontWheel->GetWorldCenter().z, originalFrontWorldCenter.z, EPS);
+    EXPECT_NEAR(backWheel->GetWorldCenter().x, originalBackWorldCenter.x, EPS);
+    EXPECT_NEAR(backWheel->GetWorldCenter().y, -originalBackWorldCenter.y, EPS);
+    EXPECT_NEAR(backWheel->GetWorldCenter().z, originalBackWorldCenter.z, EPS);
+    std::cout << "Ending front wheel center: " << glm::to_string(frontWheel->GetWorldCenter()) << std::endl;
+    std::cout << "Ending back wheel center: " << glm::to_string(backWheel->GetWorldCenter()) << std::endl;
+}
