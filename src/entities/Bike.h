@@ -8,11 +8,14 @@
 class Bike {
 public:
     static constexpr float SCALE = 0.01f;
+    static constexpr float GRAVITATIONAL_ACCELERATION = 0.00001;
+    static constexpr float MAX_FALL_SPEED = -0.015;
 
     Bike(Camera& cameraRef);
 
     Transform& getTransform();
-    bool Bike::IsCollidingWithGround() const;
+    bool IsCollidingWithGround() const;
+    void applyVerticalForce();
 
 private:
     Transform transform;
@@ -20,4 +23,6 @@ private:
 
     std::optional<WheelHitbox> frontWheel;
     std::optional<WheelHitbox> backWheel;
+
+    float vertical_velocity;
 };

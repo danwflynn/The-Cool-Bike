@@ -99,8 +99,7 @@ void Engine::Run() {
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        glm::vec3 bikePos = bike.getTransform().GetPosition();
-        if (!bike.IsCollidingWithGround()) bike.getTransform().SetPosition(glm::vec3(bikePos.x, bikePos.y - 0.001, bikePos.z));
+        bike.applyVerticalForce();
     }
 
     glfwTerminate();

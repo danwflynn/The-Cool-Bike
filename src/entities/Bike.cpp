@@ -4,7 +4,7 @@
 #include <assimp/postprocess.h>
 #include <iostream>
 
-Bike::Bike(Camera& cameraRef) : camera(cameraRef) {
+Bike::Bike(Camera& cameraRef) : camera(cameraRef), vertical_velocity(0.0f) {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(
         "assets/bike/standard_bike.glb",
@@ -35,8 +35,8 @@ Bike::Bike(Camera& cameraRef) : camera(cameraRef) {
     }
 
     transform.SetScale(glm::vec3(SCALE));
-    transform.SetPosition(glm::vec3(0.0f, 2.0f, -2.0f));
-    transform.SetRotation(glm::vec3(0.0f, 0.0f, glm::radians(45.0f)));
+    transform.SetPosition(glm::vec3(0.0f, 20.0f, -2.0f));
+    transform.SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 }
 
 Transform& Bike::getTransform() {
@@ -44,5 +44,20 @@ Transform& Bike::getTransform() {
 }
 
 bool Bike::IsCollidingWithGround() const {
-    return backWheel->IsCollidingWithGround() || frontWheel->IsCollidingWithGround();
+    bool back = backWheel && backWheel->IsCollidingWithGround();
+    bool front = frontWheel && frontWheel->IsCollidingWithGround();
+    return back || front;
+}
+
+void Bike::applyVerticalForce() {
+    if (!IsCollidingWithGround()) {
+        vertical_velocity -= GRAVITATIONAL_ACCELERATION;
+        vertical_velocity = std::max(vertical_velocity, MAX_FALL_SPEED);
+    } else {
+        vertical_velocity = 0.0f;
+    }
+
+    glm::vec3 bikePos = transform.GetPosition();
+    bikePos.y += vertical_velocity;
+    transform.SetPosition(bikePos);
 }
