@@ -10,9 +10,10 @@ public:
     glm::vec3 GetWorldCenter() const;
     float GetWorldThickness() const;
 
-    float WheelHitbox::GetWorldVerticalRadius() const;
-    bool WheelHitbox::IsCollidingWithGround() const;
-    float WheelHitbox::GetGroundPenetration() const;
+    glm::vec3 GetWorldNormal() const;
+    float GetLowestPointY() const;
+    bool IsCollidingWithGround() const;
+    float GetGroundPenetration() const;;
 
 private:
     Transform& transform;

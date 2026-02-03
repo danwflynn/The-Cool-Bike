@@ -46,34 +46,21 @@ float WheelHitbox::GetWorldThickness() const {
     return glm::length(worldThicknessVec);
 }
 
-float WheelHitbox::GetWorldVerticalRadius() const {
-    const glm::vec3& scale = transform.GetScale();
-    const glm::vec3& rot   = transform.GetRotation();
+glm::vec3 WheelHitbox::GetWorldNormal() const {
+    glm::mat4 world = transform.GetMatrix();
+    return glm::normalize(glm::vec3(world * glm::vec4(0, 0, 1, 0)));
+}
 
-    // Wheel local Y rotated into world
-    glm::mat4 rotMat(1.0f);
-    rotMat = glm::rotate(rotMat, rot.x, glm::vec3(1,0,0));
-    rotMat = glm::rotate(rotMat, rot.y, glm::vec3(0,1,0));
-    rotMat = glm::rotate(rotMat, rot.z, glm::vec3(0,0,1));
-
-    glm::vec3 worldUp = glm::vec3(rotMat * glm::vec4(0,1,0,0));
-
-    float verticalComponent = std::abs(glm::dot(worldUp, glm::vec3(0,1,0)));
-
-    return radius * scale.y * verticalComponent;
+float WheelHitbox::GetLowestPointY() const {
+    glm::vec3 center = GetWorldCenter();
+    float verticalRadius = radius * transform.GetScale().y; // full radius
+    return center.y - verticalRadius;
 }
 
 bool WheelHitbox::IsCollidingWithGround() const {
-    float centerY = GetWorldCenter().y;
-    float verticalRadius = GetWorldVerticalRadius();
-
-    return (centerY - verticalRadius) <= 0.0f;
+    return GetLowestPointY() <= 0.0f;
 }
 
 float WheelHitbox::GetGroundPenetration() const {
-    float centerY = GetWorldCenter().y;
-    float verticalRadius = GetWorldVerticalRadius();
-
-    float penetration = verticalRadius - centerY;
-    return std::max(penetration, 0.0f);
+    return std::max(0.0f, -GetLowestPointY());
 }

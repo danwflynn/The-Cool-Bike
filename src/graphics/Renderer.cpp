@@ -75,7 +75,7 @@ void Renderer::RenderBike(const Transform& transform, const Camera& camera) {
 
     const auto& bike_meshes = m_Bike->getMeshes();
     for (int i = 0; i < bike_meshes.size(); i++) {
-        if (i == 3) m_DefaultShader->SetVec3("u_ObjectColor", {0.7f, 0.2f, 0.3f});
+        if (i == 3 || i == 2) m_DefaultShader->SetVec3("u_ObjectColor", {0.7f, 0.2f, 0.3f});
         else m_DefaultShader->SetVec3("u_ObjectColor", {0.2f, 0.7f, 0.3f});
         bike_meshes[i].Draw();
     }
