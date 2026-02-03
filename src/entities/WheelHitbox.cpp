@@ -57,15 +57,20 @@ float WheelHitbox::GetLowestPointY() const {
 
     glm::vec3 gravity(0, -1, 0);
 
-    glm::vec3 radialDown = gravity - axis * glm::dot(gravity, axis);
+    glm::vec3 radial = gravity - axis * glm::dot(gravity, axis);
+    if (glm::dot(radial, radial) > 1e-6f)
+        radial = glm::normalize(radial);
+    else
+        radial = glm::vec3(0.0f);
 
-    if (glm::dot(radialDown, radialDown) < 1e-6f) radialDown = gravity;
+    glm::vec3 axial = axis * glm::sign(glm::dot(gravity, axis));
 
-    radialDown = glm::normalize(radialDown);
+    float worldRadius    = radius    * transform.GetScale().y;
+    float worldThickness = thickness * transform.GetScale().x * THICKNESS_DAMPENER;
 
-    float worldRadius = radius * transform.GetScale().y;
+    glm::vec3 lowest = center + radial * worldRadius + axial * worldThickness;
 
-    return center.y + radialDown.y * worldRadius;
+    return lowest.y;
 }
 
 bool WheelHitbox::IsCollidingWithGround() const {

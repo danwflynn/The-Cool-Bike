@@ -5,6 +5,8 @@
 
 class WheelHitbox {
 public:
+    static constexpr float THICKNESS_DAMPENER = 0.5f;
+
     WheelHitbox(const std::vector<glm::vec3>& vertices, Transform& parentTransform);
 
     glm::vec3 GetWorldCenter() const;

@@ -36,7 +36,7 @@ Bike::Bike(Camera& cameraRef) : camera(cameraRef), vertical_velocity(0.0f) {
 
     transform.SetScale(glm::vec3(SCALE));
     transform.SetPosition(glm::vec3(0.0f, 20.0f, -2.0f));
-    transform.SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+    transform.SetRotation(glm::vec3(glm::radians(0.0f), 0.0f, glm::radians(35.0f)));
 }
 
 Transform& Bike::getTransform() {
