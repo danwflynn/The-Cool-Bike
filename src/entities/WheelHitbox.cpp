@@ -46,15 +46,26 @@ float WheelHitbox::GetWorldThickness() const {
     return glm::length(worldThicknessVec);
 }
 
-glm::vec3 WheelHitbox::GetWorldNormal() const {
+glm::vec3 WheelHitbox::GetWheelAxisWorld() const {
     glm::mat4 world = transform.GetMatrix();
-    return glm::normalize(glm::vec3(world * glm::vec4(0, 0, 1, 0)));
+    return glm::normalize(glm::vec3(world * glm::vec4(1, 0, 0, 0)));
 }
 
 float WheelHitbox::GetLowestPointY() const {
     glm::vec3 center = GetWorldCenter();
-    float verticalRadius = radius * transform.GetScale().y; // full radius
-    return center.y - verticalRadius;
+    glm::vec3 axis   = GetWheelAxisWorld();
+
+    glm::vec3 gravity(0, -1, 0);
+
+    glm::vec3 radialDown = gravity - axis * glm::dot(gravity, axis);
+
+    if (glm::dot(radialDown, radialDown) < 1e-6f) radialDown = gravity;
+
+    radialDown = glm::normalize(radialDown);
+
+    float worldRadius = radius * transform.GetScale().y;
+
+    return center.y + radialDown.y * worldRadius;
 }
 
 bool WheelHitbox::IsCollidingWithGround() const {
