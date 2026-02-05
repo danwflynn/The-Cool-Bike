@@ -13,7 +13,7 @@ public:
     float GetWorldThickness() const;
 
     glm::vec3 GetWheelAxisWorld() const;
-    float GetLowestPointY() const;
+    glm::vec3 GetLowestPoint() const;
     bool IsCollidingWithGround() const;
     float GetGroundPenetration() const;;
 

@@ -51,7 +51,7 @@ glm::vec3 WheelHitbox::GetWheelAxisWorld() const {
     return glm::normalize(glm::vec3(world * glm::vec4(1, 0, 0, 0)));
 }
 
-float WheelHitbox::GetLowestPointY() const {
+glm::vec3 WheelHitbox::GetLowestPoint() const {
     glm::vec3 center = GetWorldCenter();
     glm::vec3 axis   = GetWheelAxisWorld();
 
@@ -70,13 +70,13 @@ float WheelHitbox::GetLowestPointY() const {
 
     glm::vec3 lowest = center + radial * worldRadius + axial * worldThickness;
 
-    return lowest.y;
+    return lowest;
 }
 
 bool WheelHitbox::IsCollidingWithGround() const {
-    return GetLowestPointY() <= 0.0f;
+    return GetLowestPoint().y <= 0.0f;
 }
 
 float WheelHitbox::GetGroundPenetration() const {
-    return std::max(0.0f, -GetLowestPointY());
+    return std::max(0.0f, GetLowestPoint().y);
 }
