@@ -49,6 +49,8 @@ target_link_libraries(MyEngineCore
     assimp
 )
 
+target_compile_definitions(MyEngineCore PUBLIC GLM_ENABLE_EXPERIMENTAL)
+
 add_executable(MyEngine
     src/main.cpp
     external/glad/src/glad.c
@@ -65,16 +67,13 @@ add_executable(MyEngineTests
     test/entities/WheelHitboxTests.cpp
 )
 
-target_compile_definitions(MyEngineTests PRIVATE
-    GLM_ENABLE_EXPERIMENTAL
-)
-
 target_link_libraries(MyEngineTests
     MyEngineCore
     gtest_main
 )
 
-enable_testing()
+target_compile_definitions(MyEngineTests PRIVATE GLM_ENABLE_EXPERIMENTAL)
 
+enable_testing()
 include(GoogleTest)
 gtest_discover_tests(MyEngineTests)
