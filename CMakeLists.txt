@@ -33,6 +33,8 @@ add_library(MyEngineCore
 
     src/math/Transform.cpp
     src/math/Camera.cpp
+    src/math/camera-control/FreeCameraController.cpp
+    src/math/camera-control/FollowCameraController.cpp
 
     src/entities/Bike.cpp
     src/entities/WheelHitbox.cpp
@@ -57,6 +59,16 @@ add_executable(MyEngine
 )
 
 target_link_libraries(MyEngine
+    MyEngineCore
+    opengl32
+)
+
+add_executable(MyEngineSpectate
+    src/spectate.cpp
+    external/glad/src/glad.c
+)
+
+target_link_libraries(MyEngineSpectate
     MyEngineCore
     opengl32
 )

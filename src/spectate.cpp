@@ -3,6 +3,6 @@
 int main()
 {
     Engine engine;
-    engine.RunWithFollowCamera();
+    engine.RunWithFreeCamera();
     return 0;
 }

@@ -15,7 +15,7 @@ public:
 
     Bike(Camera& cameraRef);
 
-    Transform& getTransform();
+    const Transform& getTransform() const;
     void RotateAroundPoint(const glm::vec3& point, const glm::vec3& axis, float angle);
     void applyVerticalForce();
 

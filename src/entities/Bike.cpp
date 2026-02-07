@@ -45,10 +45,10 @@ Bike::Bike(Camera& cameraRef)
 
     transform.SetScale(glm::vec3(SCALE));
     transform.SetPosition(glm::vec3(0.0f, 20.0f, -2.0f));
-    transform.SetRotationEuler(glm::vec3(glm::radians(45.0f), glm::radians(0.0f), glm::radians(0.0f)));
+    transform.SetRotationEuler(glm::vec3(glm::radians(-45.0f), glm::radians(180.0f), glm::radians(0.0f)));
 }
 
-Transform& Bike::getTransform() {
+const Transform& Bike::getTransform() const {
     return transform;
 }
 
