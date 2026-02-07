@@ -75,8 +75,10 @@ void Renderer::RenderBike(const Transform& transform, const Camera& camera) {
 
     const auto& bike_meshes = m_Bike->getMeshes();
     for (int i = 0; i < bike_meshes.size(); i++) {
-        if (i == 3 || i == 2) m_DefaultShader->SetVec3("u_ObjectColor", {0.7f, 0.2f, 0.3f});
-        else m_DefaultShader->SetVec3("u_ObjectColor", {0.2f, 0.7f, 0.3f});
+        if (i == 3 || i == 2) m_DefaultShader->SetVec3("u_ObjectColor", {0.0f, 0.0f, 0.0f});
+        else if (i == 5 || i == 4) m_DefaultShader->SetVec3("u_ObjectColor", {0.5f, 0.5f, 0.5f});
+        else if (i == 0) m_DefaultShader->SetVec3("u_ObjectColor", {0.78f, 0.576f, 0.067f});
+        else m_DefaultShader->SetVec3("u_ObjectColor", {0.25f, 0.25f, 0.25f});
         bike_meshes[i].Draw();
     }
 
