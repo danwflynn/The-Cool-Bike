@@ -28,18 +28,18 @@ void FollowCameraController::Update(Camera& camera, float dt) {
 
     glm::vec3 currentPos = camera.GetPosition();
     float blend = 1.0f - glm::exp(-smoothing * dt);
-    
     glm::vec3 newPos;
-
     newPos.x = glm::mix(currentPos.x, targetPos.x, blend);
     newPos.z = glm::mix(currentPos.z, targetPos.z, blend);
-
-    newPos.y = targetPos.y; 
+    newPos.y = targetPos.y;
 
     camera.SetPosition(newPos);
 
-    glm::vec3 lookTarget = bikePos + glm::vec3(0.0f, 0.8f, 0.0f); 
+    glm::vec3 lookTarget = bikePos + glm::vec3(0.0f, 0.8f, 0.0f);
     glm::vec3 lookDir = glm::normalize(lookTarget - newPos);
-    
-    camera.SetRotation(DirectionToEuler(lookDir));
+
+    glm::vec3 euler = DirectionToEuler(lookDir);
+    euler.x -= pitchOffset;
+
+    camera.SetRotation(euler);
 }

@@ -12,7 +12,8 @@ public:
 private:
     const Bike& targetBike;
 
-    float followDistance = 9.5f;
-    float height = 1.2f;
+    float followDistance = 6.5f;
+    float height = 3.5f;
     float smoothing = 6.0f;
+    float pitchOffset = -0.7f;
 };
