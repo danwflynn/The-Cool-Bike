@@ -19,8 +19,8 @@ void Renderer::Init(GLFWwindow* window) {
     );
 
     std::vector<MeshSplitRule> bikeSplits = {
-        { "polygon2", SplitAxis::Z, 0.0f },
-        { "polygon3", SplitAxis::Z, 0.0f }
+        { "tires", SplitAxis::Z, 0.0f },
+        { "wheels", SplitAxis::Z, 0.0f }
     };
     m_Bike = std::make_unique<Model>(
         ModelNames::STANDARD_BIKE,
@@ -76,11 +76,11 @@ void Renderer::RenderBike(const Transform& transform, const Camera& camera) {
 
     const auto& bike_meshes = m_Bike->getMeshes();
     for (int i = 0; i < bike_meshes.size(); i++) {
-        if (i == 3 || i == 2) m_DefaultShader->SetVec3("u_ObjectColor", {0.0f, 0.0f, 0.0f});
-        else if (i == 5 || i == 4) m_DefaultShader->SetVec3("u_ObjectColor", {0.5f, 0.5f, 0.5f});
-        else if (i == 0) m_DefaultShader->SetVec3("u_ObjectColor", {0.78f, 0.576f, 0.067f});
+        if (i == 5 || i == 4) m_DefaultShader->SetVec3("u_ObjectColor", {0.0f, 0.0f, 0.0f});
+        else if (i == 7 || i == 6) m_DefaultShader->SetVec3("u_ObjectColor", {0.5f, 0.5f, 0.5f});
+        else if (i == 3) m_DefaultShader->SetVec3("u_ObjectColor", {0.78f, 0.576f, 0.067f});
         else if (i == 1) m_DefaultShader->SetVec3("u_ObjectColor", {0.188f, 0.431f, 0.788f});
-        else if (i == 6) m_DefaultShader->SetVec3("u_ObjectColor", {0.788f, 0.267f, 0.188f,});
+        else if (i == 2) m_DefaultShader->SetVec3("u_ObjectColor", {0.788f, 0.267f, 0.188f,});
         else m_DefaultShader->SetVec3("u_ObjectColor", {0.25f, 0.25f, 0.25f});
         bike_meshes[i].Draw();
     }

@@ -9,6 +9,7 @@
 #include <glm/gtc/constants.hpp>
 
 #include "entities/Bike.h"
+#include "util/ModelNames.h"
 
 
 constexpr float EPS = 1e-5f;
@@ -24,7 +25,7 @@ protected:
     void SetUp() override {
         Assimp::Importer importer;
         const aiScene* scene = importer.ReadFile(
-            "assets/bike/standard_bike.glb",
+            ModelNames::STANDARD_BIKE,
             aiProcess_Triangulate |
             aiProcess_GenNormals |
             aiProcess_JoinIdenticalVertices |
@@ -37,7 +38,7 @@ protected:
         for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
             aiMesh* mesh = scene->mMeshes[i];
 
-            if (mesh->mName == aiString("polygon2")) {
+            if (mesh->mName == aiString("tires")) {
                 std::vector<glm::vec3> posVertices;
                 std::vector<glm::vec3> negVertices;
                 posVertices.reserve(mesh->mNumVertices);
