@@ -4,13 +4,14 @@
 #include <assimp/postprocess.h>
 #include <iostream>
 #include <glm/gtx/quaternion.hpp>
+#include "util/ModelNames.h"
 
 Bike::Bike(Camera& cameraRef) 
     : camera(cameraRef), vertical_velocity(0.0f), angular_velocity(0.0f) 
 {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(
-        "assets/bike/standard_bike.glb",
+        ModelNames::STANDARD_BIKE,
         aiProcess_Triangulate |
         aiProcess_GenNormals |
         aiProcess_JoinIdenticalVertices |

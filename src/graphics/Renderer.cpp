@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include <iostream>
+#include "util/ModelNames.h"
 
 void Renderer::Init(GLFWwindow* window) {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -22,7 +23,7 @@ void Renderer::Init(GLFWwindow* window) {
         { "polygon3", SplitAxis::Z, 0.0f }
     };
     m_Bike = std::make_unique<Model>(
-        "assets/bike/standard_bike.glb",
+        ModelNames::STANDARD_BIKE,
         bikeSplits
     );
 
@@ -78,6 +79,8 @@ void Renderer::RenderBike(const Transform& transform, const Camera& camera) {
         if (i == 3 || i == 2) m_DefaultShader->SetVec3("u_ObjectColor", {0.0f, 0.0f, 0.0f});
         else if (i == 5 || i == 4) m_DefaultShader->SetVec3("u_ObjectColor", {0.5f, 0.5f, 0.5f});
         else if (i == 0) m_DefaultShader->SetVec3("u_ObjectColor", {0.78f, 0.576f, 0.067f});
+        else if (i == 1) m_DefaultShader->SetVec3("u_ObjectColor", {0.188f, 0.431f, 0.788f});
+        else if (i == 6) m_DefaultShader->SetVec3("u_ObjectColor", {0.788f, 0.267f, 0.188f,});
         else m_DefaultShader->SetVec3("u_ObjectColor", {0.25f, 0.25f, 0.25f});
         bike_meshes[i].Draw();
     }

@@ -46,3 +46,14 @@ link to MyEngineCore.
 ![Picture](docs/bikeonground.png)
 
 I've implemented shaders, meshes, and model loaders for rendering. I've implemented a free view and chase camera to follow the bike. I've implemented transforms using quaternions. Transforms are used for the bike's position, rotation, scale, and hitboxes. There is a hitbox in each wheel to detect ground collision. Currently, the bike starts in the air and falls down due to gravity. The bike is angled upward so that it will land on the back wheel and then fall down to the front wheel by rotating around the collision point.
+
+## Note to self
+
+Since I hate using blender, I'm writing this as a reminder. The bike mesh names are:
+
+- polygon0
+- polygon0.001
+- polygon2
+- polygon3
+- polygon1.001
+- polygon1
